@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-thiru-black text-white overflow-x-hidden;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-zinc-900;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-red-900 rounded-full hover:bg-red-700;
+}
+
+/* Cinematic Utilities */
+.text-glow {
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+}
+
+.glass-panel {
+  @apply bg-black/60 backdrop-blur-md border border-white/10;
+}
