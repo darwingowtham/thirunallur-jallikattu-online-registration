@@ -21,9 +21,9 @@ export default function BullGallery({ lang }) {
                     {lang === 'en' ? 'Bull Legend Gallery' : 'காளைகள் காட்சியகம்'}
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     {BULLS.map((bull) => (
-                        <div key={bull.id} className="group h-96 perspective-1000">
+                        <div key={bull.id} className="group h-[22rem] sm:h-96 perspective-1000">
                             <div className="relative w-full h-full transition-all duration-700 transform-style-3d group-hover:rotate-y-180">
 
                                 {/* Front Side */}

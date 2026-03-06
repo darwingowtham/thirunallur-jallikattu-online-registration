@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { User, Shield, CreditCard, CheckCircle, ChevronRight, ChevronLeft, Upload, FileText, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
+import { FcGoogle } from 'react-icons/fc';
 import { LANG } from '../js/lang';
 import templeImg from '../assets/temple/amman_temple.jpeg';
 
@@ -212,6 +213,22 @@ export default function Registration({ lang }) {
                                     <h3 className={clsx("text-xl font-bold text-thiru-gold mb-6 border-b border-zinc-800 pb-2", lang === 'ta' && 'font-tamil')}>
                                         {t.step1}
                                     </h3>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData(prev => ({ ...prev, name: 'Google User', email: 'user@gmail.com' }))}
+                                        className="w-full flex items-center justify-center gap-3 bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-bold transition-all mb-6"
+                                    >
+                                        <FcGoogle size={24} />
+                                        {lang === 'ta' ? 'கூகுள் மூலம் தொடரவும்' : 'Continue with Google'}
+                                    </button>
+
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <div className="flex-1 h-px bg-zinc-800"></div>
+                                        <span className={clsx("text-zinc-500 text-sm", lang === 'ta' && 'font-tamil')}>{lang === 'ta' ? 'அல்லது' : 'Or'}</span>
+                                        <div className="flex-1 h-px bg-zinc-800"></div>
+                                    </div>
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <InputField label={t.fields.name} name="name" value={formData.name} onChange={handleChange} lang={lang} />
                                         <InputField label={t.fields.phone} name="phone" type="tel" value={formData.phone} onChange={handleChange} lang={lang} />
@@ -561,7 +578,7 @@ export default function Registration({ lang }) {
                                     <p className="text-zinc-400 text-sm mb-6">Please save this token for entry.</p>
 
                                     {/* ID CARD TOKEN DESIGN */}
-                                    <div className="bg-white text-black rounded-xl max-w-sm mx-auto shadow-2xl transform transition-transform hover:scale-[1.02] duration-300 relative border border-zinc-200 mt-12">
+                                    <div className="bg-white text-black rounded-xl w-full max-w-sm mx-auto shadow-2xl transform transition-transform hover:scale-[1.02] duration-300 relative border border-zinc-200 mt-12">
 
                                         {/* Temple Watermark (Background) */}
                                         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden rounded-xl">
@@ -598,7 +615,7 @@ export default function Registration({ lang }) {
 
                                             {/* Top Row: Photo & QR */}
                                             {/* Grid: Photo & QR */}
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                                 {/* Left: Photo Area */}
                                                 <div className="w-full aspect-[3/4] bg-zinc-50 border-2 border-dashed border-zinc-300 rounded-lg flex flex-col items-center justify-center text-zinc-400">
                                                     <User size={32} strokeWidth={1} />
@@ -626,41 +643,41 @@ export default function Registration({ lang }) {
                                             </div>
 
                                             {/* Details Table */}
-                                            <div className="border-t border-b border-zinc-200/60 py-3 space-y-2 text-left text-sm bg-white/40 backdrop-blur-sm rounded px-2">
-                                                <div className="grid grid-cols-3 gap-2">
-                                                    <span className="text-zinc-600 text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.nameShort}</span>
+                                            <div className="border-t border-b border-zinc-200/60 py-3 space-y-2 text-left text-xs sm:text-sm bg-white/40 backdrop-blur-sm rounded px-1 sm:px-2">
+                                                <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                                                    <span className="text-zinc-600 text-[10px] sm:text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.nameShort}</span>
                                                     <span className="font-bold col-span-2 truncate">{formData.name}</span>
                                                 </div>
                                                 {regType === 'bull' ? (
                                                     <>
-                                                        <div className="grid grid-cols-3 gap-2">
-                                                            <span className="text-zinc-600 text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.bullShort}</span>
+                                                        <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                                                            <span className="text-zinc-600 text-[10px] sm:text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.bullShort}</span>
                                                             <span className="font-bold col-span-2 truncate">{formData.bullName || '-'}</span>
                                                         </div>
-                                                        <div className="grid grid-cols-3 gap-2">
-                                                            <span className="text-zinc-600 text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.breedShort}</span>
+                                                        <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                                                            <span className="text-zinc-600 text-[10px] sm:text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.breedShort}</span>
                                                             <span className="font-semibold col-span-2 truncate">{formData.breed || '-'}</span>
                                                         </div>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <div className="grid grid-cols-3 gap-2">
-                                                            <span className="text-zinc-600 text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.tamerAge}</span>
+                                                        <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                                                            <span className="text-zinc-600 text-[10px] sm:text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.tamerAge}</span>
                                                             <span className="font-semibold col-span-2">{formData.tamerAge} Yrs</span>
                                                         </div>
-                                                        <div className="grid grid-cols-3 gap-2">
-                                                            <span className="text-zinc-600 text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.weightShort}</span>
+                                                        <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                                                            <span className="text-zinc-600 text-[10px] sm:text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.weightShort}</span>
                                                             <span className="font-semibold col-span-2">{formData.weight} KG</span>
                                                         </div>
-                                                        <div className="grid grid-cols-3 gap-2">
-                                                            <span className="text-zinc-600 text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.bloodShort}</span>
-                                                            <div className="col-span-2"><span className="bg-red-600 text-white px-1.5 py-0.5 rounded text-xs font-bold shadow-sm">{formData.bloodGroup || 'O+'}</span></div>
+                                                        <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                                                            <span className="text-zinc-600 text-[10px] sm:text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.bloodShort}</span>
+                                                            <div className="col-span-2"><span className="bg-red-600 text-white px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-bold shadow-sm">{formData.bloodGroup || 'O+'}</span></div>
                                                         </div>
                                                     </>
                                                 )}
-                                                <div className="grid grid-cols-3 gap-2">
-                                                    <span className="text-zinc-600 text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.place}</span>
-                                                    <span className="font-semibold col-span-2 truncate text-xs">{formData.village}, {formData.district}</span>
+                                                <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                                                    <span className="text-zinc-600 text-[10px] sm:text-xs uppercase font-bold tracking-wider col-span-1">{t.fields.place}</span>
+                                                    <span className="font-semibold col-span-2 truncate text-[10px] sm:text-xs">{formData.village}, {formData.district}</span>
                                                 </div>
                                             </div>
 

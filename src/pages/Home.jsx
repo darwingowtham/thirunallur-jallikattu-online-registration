@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Ticket, Video, Calendar, MapPin, ChevronRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { LANG } from '../js/lang';
@@ -7,11 +7,11 @@ import clsx from 'clsx';
 import VideoSection from '../components/VideoSection';
 import ParticleBackground from '../components/ParticleBackground';
 import ColorfulParticleBackground from '../components/ColorfulParticleBackground';
+import DynamicHeroBackground from '../components/DynamicHeroBackground';
+import YellowParticleBackground from '../components/YellowParticleBackground';
 
 export default function Home({ lang }) {
     const t = LANG[lang];
-    const { scrollY } = useScroll();
-    const y1 = useTransform(scrollY, [0, 500], [0, 200]);
 
     const location = useLocation();
 
@@ -31,50 +31,11 @@ export default function Home({ lang }) {
                 {/* Background Texture */}
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none z-0"></div>
 
-                {/* Left Side Image - Temple 14 */}
-                <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 1 }}
-                    className="absolute left-0 top-0 h-full w-1/3 z-0 pointer-events-none hidden md:block"
-                >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black z-10" />
-                    <img
-                        src="/images/temple_images/temple14.jpeg"
-                        alt="Temple Left"
-                        className="w-full h-full object-cover opacity-90"
-                        style={{ maskImage: 'linear-gradient(to right, black 60%, transparent)', WebkitMaskImage: 'linear-gradient(to right, black 60%, transparent)' }}
-                    />
-                </motion.div>
+                {/* Hero Dynamic 3D Background */}
+                <DynamicHeroBackground />
 
-                {/* Right Side Image - Temple 8 */}
-                <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 1 }}
-                    className="absolute right-0 top-0 h-full w-1/3 z-0 pointer-events-none hidden md:block"
-                >
-                    <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black z-10" />
-                    <img
-                        src="/images/temple_images/temple8.jpeg"
-                        alt="Temple Right"
-                        className="w-full h-full object-cover opacity-90"
-                        style={{ maskImage: 'linear-gradient(to left, black 60%, transparent)', WebkitMaskImage: 'linear-gradient(to left, black 60%, transparent)' }}
-                    />
-                </motion.div>
-
-                {/* Parallax Background */}
-                <motion.div
-                    style={{ y: y1 }}
-                    className="absolute inset-0 z-0 pointer-events-none"
-                >
-                    <img
-                        src="/images/temple_images/temple10.jpeg"
-                        alt="Temple Background"
-                        className="w-full h-full object-contain opacity-80"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-thiru-black" />
-                </motion.div>
+                {/* Interactive Yellow Particles layered in front of background but behind text */}
+                <YellowParticleBackground />
 
                 <div className="absolute inset-0 z-0 select-none pointer-events-none">
                     <ParticleBackground />
@@ -91,12 +52,12 @@ export default function Home({ lang }) {
                     >
 
                         {/* Fallback color text-white added just in case background clip fails */}
-                        <h1 className={clsx("font-black text-white drop-shadow-2xl mb-4 whitespace-nowrap w-full uppercase", lang === 'ta' ? "text-[4vw] md:text-[3.5vw] leading-tight font-tamil" : "text-[5vw] md:text-[4.5vw] lg:text-[4vw]")}>
+                        <h1 className={clsx("font-black text-white drop-shadow-2xl mb-4 whitespace-normal sm:whitespace-nowrap w-full uppercase", lang === 'ta' ? "text-4xl md:text-5xl lg:text-6xl leading-tight font-tamil" : "text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase tracking-wider")}>
                             <span className="bg-clip-text text-transparent bg-gradient-to-b from-yellow-200 to-yellow-600">
                                 {t.title}
                             </span>
                         </h1>
-                        <p className={clsx("text-xl md:text-2xl text-zinc-100 font-medium tracking-wide max-w-3xl mx-auto drop-shadow-md bg-black/30 p-2 rounded-lg backdrop-blur-sm", lang === 'ta' && 'font-tamil')}>
+                        <p className={clsx("text-lg sm:text-xl md:text-2xl text-zinc-100 font-medium tracking-wide max-w-3xl mx-auto drop-shadow-md bg-black/30 p-2 sm:px-4 rounded-lg backdrop-blur-sm", lang === 'ta' && 'font-tamil')}>
                             {t.subtitle}
                         </p>
                     </motion.div>
@@ -105,15 +66,15 @@ export default function Home({ lang }) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
-                        className="flex flex-col sm:flex-row gap-4 justify-center"
+                        className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-xs sm:max-w-none mx-auto"
                     >
-                        <Link to="/book" className="group relative px-8 py-4 bg-thiru-red rounded-sm overflow-hidden shadow-[0_0_20px_rgba(185,28,28,0.5)]">
+                        <Link to="/book" className="group relative px-6 py-4 sm:px-8 sm:py-4 bg-thiru-red rounded-sm overflow-hidden shadow-[0_0_20px_rgba(185,28,28,0.5)] w-full sm:w-auto text-center">
                             <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-900 transition-transform group-hover:scale-110" />
                             <span className={clsx("relative z-10 font-bold text-white flex items-center justify-center gap-2 uppercase tracking-widest", lang === 'ta' && 'font-tamil')}>
                                 <Ticket size={20} /> {t.heroBtn}
                             </span>
                         </Link>
-                        <Link to="/live" className="group px-8 py-4 border border-thiru-gold text-thiru-gold rounded-sm hover:bg-thiru-gold/10 transition-colors bg-black/40 backdrop-blur-sm">
+                        <Link to="/live" className="group px-6 py-4 sm:px-8 sm:py-4 border border-thiru-gold text-thiru-gold rounded-sm hover:bg-thiru-gold/10 transition-colors bg-black/40 backdrop-blur-sm w-full sm:w-auto text-center">
                             <span className={clsx("font-bold flex items-center justify-center gap-2 uppercase tracking-widest", lang === 'ta' && 'font-tamil')}>
                                 <Video size={20} /> {t.heroSec}
                             </span>
@@ -130,6 +91,17 @@ export default function Home({ lang }) {
                     <span className="text-xs uppercase tracking-widest">Scroll Down</span>
                     <ChevronRight className="rotate-90 w-6 h-6" />
                 </motion.div>
+
+                {/* Bottom Left Small Temple Image */}
+                <div className="absolute bottom-0 left-0 z-30 group flex items-end justify-start pointer-events-none">
+                    {/* Blurred backdrop for the image */}
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-md rounded-tr-lg scale-105 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <img
+                        src="/images/temple_images/temple15.jpeg"
+                        alt="Thirunallur Ambu"
+                        className="relative w-24 sm:w-32 md:w-40 h-auto block rounded-tr-lg shadow-2xl opacity-90 group-hover:opacity-100 transition-all z-10 pointer-events-auto"
+                    />
+                </div>
             </div>
 
             {/* Intro Section */}
@@ -160,18 +132,7 @@ export default function Home({ lang }) {
                             <span className={clsx("whitespace-pre-line", lang === 'ta' && 'font-tamil')}>{t.about.loc}</span>
                         </div>
 
-                        <div className="w-full h-64 rounded-xl overflow-hidden shadow-lg border border-zinc-200 dark:border-zinc-800 mt-6 relative z-10">
-                            <iframe
-                                src="https://maps.google.com/maps?q=HJV4%2BFWR&t=&z=15&ie=UTF8&iwloc=near&output=embed"
-                                width="100%"
-                                height="100%"
-                                style={{ border: 0 }}
-                                allowFullScreen=""
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                                title="Thirunallur Temple Location"
-                            ></iframe>
-                        </div>
+
                     </div>
 
                     {/* Countdown Card */}

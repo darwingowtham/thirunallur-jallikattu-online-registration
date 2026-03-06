@@ -26,27 +26,18 @@ export default function LiveUpdates({ lang }) {
                     </button>
                 </div>
 
-                {/* Video Player Placeholder */}
+                {/* Video Player */}
                 <div className="aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-zinc-800 relative group">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center">
-                            <div className="w-24 h-24 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform cursor-pointer border-2 border-red-600">
-                                <Video className="w-10 h-10 text-red-500" />
-                            </div>
-                            <p className="text-zinc-500 font-mono tracking-widest uppercase">Stream Offline</p>
-                            <p className="text-zinc-600 text-xs mt-2">Starts Jan 16, 08:00 AM</p>
-                        </div>
-                    </div>
-
-                    {/* Overlay UI */}
-                    <div className="absolute top-4 left-4 flex gap-2">
-                        <div className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded flex items-center gap-2">
-                            <Radio size={14} className="animate-pulse" /> LIVE
-                        </div>
-                        <div className="bg-black/60 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded border border-white/10">
-                            0 Viewers
-                        </div>
-                    </div>
+                    <iframe
+                        width="100%"
+                        height="100%"
+                        src={`https://www.youtube.com/embed/Jl8EVhA-z9g?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&origin=${window.location.origin}`}
+                        title="Thirunallur Jallikattu Live"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="w-full h-full"
+                    ></iframe>
                 </div>
 
                 {/* Live Ticker */}
