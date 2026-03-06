@@ -12,6 +12,7 @@ import ParticleBackground from './components/ParticleBackground';
 import SocialLinks from './components/SocialLinks';
 import Videos from './pages/Videos';
 import Menu from './pages/Menu';
+import Profile from './pages/Profile';
 import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             <Route path="/" element={<Home lang={lang} />} />
             <Route path="/book" element={<Registration lang={lang} />} />
             <Route path="/menu" element={<Menu lang={lang} />} />
+            <Route path="/profile" element={<Profile lang={lang} />} />
             <Route path="/tracking" element={<ApplicationStatus lang={lang} />} />
             <Route path="/gallery" element={<BullGallery lang={lang} />} />
             <Route path="/videos" element={<Navigate to="/#videos" replace />} />

@@ -3,6 +3,9 @@ import { User, Shield, CreditCard, CheckCircle, ChevronRight, ChevronLeft, Uploa
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 import { FcGoogle } from 'react-icons/fc';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '../context/AuthContext';
 import { LANG } from '../js/lang';
 import templeImg from '../assets/temple/amman_temple.jpeg';
 
@@ -75,6 +78,7 @@ const FileUpload = ({ label, lang, accept, onChange }) => {
 
 export default function Registration({ lang }) {
     const t = getT(lang);
+    const { user, login } = useAuth();
     const [regType, setRegType] = useState(null); // 'bull' | 'tamer' | null
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -101,7 +105,16 @@ export default function Registration({ lang }) {
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
     const handleFileChange = (name, file) => setFormData(prev => ({ ...prev, [name]: file }));
 
-
+    // Pre-fill user data when user logs in
+    React.useEffect(() => {
+        if (user && formData.name === '' && formData.email === '') {
+            setFormData(prev => ({
+                ...prev,
+                name: user.name || '',
+                email: user.email || ''
+            }));
+        }
+    }, [user]);
 
     const handleSubmit = () => {
         setLoading(true);
@@ -214,53 +227,71 @@ export default function Registration({ lang }) {
                                         {t.step1}
                                     </h3>
 
-                                    <button
-                                        type="button"
-                                        onClick={() => setFormData(prev => ({ ...prev, name: 'Google User', email: 'user@gmail.com' }))}
-                                        className="w-full flex items-center justify-center gap-3 bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-bold transition-all mb-6"
-                                    >
-                                        <FcGoogle size={24} />
-                                        {lang === 'ta' ? 'கூகுள் மூலம் தொடரவும்' : 'Continue with Google'}
-                                    </button>
-
-                                    <div className="flex items-center gap-4 mb-6">
-                                        <div className="flex-1 h-px bg-zinc-800"></div>
-                                        <span className={clsx("text-zinc-500 text-sm", lang === 'ta' && 'font-tamil')}>{lang === 'ta' ? 'அல்லது' : 'Or'}</span>
-                                        <div className="flex-1 h-px bg-zinc-800"></div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <InputField label={t.fields.name} name="name" value={formData.name} onChange={handleChange} lang={lang} />
-                                        <InputField label={t.fields.phone} name="phone" type="tel" value={formData.phone} onChange={handleChange} lang={lang} />
-                                    </div>
-                                    <InputField label={t.fields.email} name="email" type="email" required={false} value={formData.email} onChange={handleChange} lang={lang} />
-                                    <InputField label={t.fields.aadhar} name="aadhar" value={formData.aadhar} onChange={handleChange} lang={lang} />
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <InputField label={t.fields.district} name="district" value={formData.district} onChange={handleChange} lang={lang} />
-                                        <InputField label={t.fields.village} name="village" value={formData.village} onChange={handleChange} lang={lang} />
-                                    </div>
-                                    <InputField label={t.fields.address} name="address" value={formData.address} onChange={handleChange} lang={lang} />
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <InputField label={t.fields.doorNo} name="doorNo" value={formData.doorNo} onChange={handleChange} lang={lang} />
-                                        <InputField label={t.fields.taluk} name="taluk" value={formData.taluk} onChange={handleChange} lang={lang} />
-                                        <InputField label={t.fields.pincode} name="pincode" value={formData.pincode} onChange={handleChange} lang={lang} />
-                                    </div>
-
-                                    {regType === 'bull' && (
-                                        <div className="mt-6 pt-6 border-t border-zinc-800">
-                                            <h4 className={clsx("text-lg font-bold text-zinc-300 mb-4", lang === 'ta' && 'font-tamil')}>
-                                                {lang === 'ta' ? 'உதவியாளர் விவரங்கள்' : 'Assistant Details'}
+                                    {/* Google Login Prompt if not logged in */}
+                                    {!user ? (
+                                        <div className="flex flex-col items-center justify-center py-12 text-center">
+                                            <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mb-6">
+                                                <User className="w-10 h-10 text-zinc-400" />
+                                            </div>
+                                            <h4 className={clsx("text-2xl font-bold text-white mb-4", lang === 'ta' && 'font-tamil')}>
+                                                {lang === 'ta' ? 'பதிவு செய்ய உள்நுழையவும்' : 'Login to Register'}
                                             </h4>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <InputField label={t.fields.assistName} name="assistName" value={formData.assistName} onChange={handleChange} lang={lang} />
-                                                <InputField label={t.fields.assistMobile} name="assistMobile" type="tel" value={formData.assistMobile} onChange={handleChange} lang={lang} />
+                                            <p className="text-zinc-400 mb-8 max-w-md">
+                                                {lang === 'ta'
+                                                    ? 'காளை அல்லது மாடுபிடி வீரர் பதிவு செய்ய உங்கள் கூகுள் கணக்கை பயன்படுத்தி உள்நுழைய வேண்டும்.'
+                                                    : 'To register a bull or as a tamer, you need to log in with your Google account first.'}
+                                            </p>
+
+                                            <div className="bg-white p-2 rounded-lg">
+                                                <GoogleLogin
+                                                    onSuccess={(credentialResponse) => {
+                                                        const decoded = jwtDecode(credentialResponse.credential);
+                                                        login(decoded);
+                                                    }}
+                                                    onError={() => {
+                                                        console.log('Login Failed');
+                                                    }}
+                                                    theme="outline"
+                                                    size="large"
+                                                />
                                             </div>
                                         </div>
-                                    )}
+                                    ) : (
+                                        <>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <InputField label={t.fields.name} name="name" value={formData.name} onChange={handleChange} lang={lang} />
+                                                <InputField label={t.fields.phone} name="phone" type="tel" value={formData.phone} onChange={handleChange} lang={lang} />
+                                            </div>
+                                            <InputField label={t.fields.email} name="email" type="email" required={false} value={formData.email} onChange={handleChange} lang={lang} />
+                                            <InputField label={t.fields.aadhar} name="aadhar" value={formData.aadhar} onChange={handleChange} lang={lang} />
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <InputField label={t.fields.district} name="district" value={formData.district} onChange={handleChange} lang={lang} />
+                                                <InputField label={t.fields.village} name="village" value={formData.village} onChange={handleChange} lang={lang} />
+                                            </div>
+                                            <InputField label={t.fields.address} name="address" value={formData.address} onChange={handleChange} lang={lang} />
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <InputField label={t.fields.doorNo} name="doorNo" value={formData.doorNo} onChange={handleChange} lang={lang} />
+                                                <InputField label={t.fields.taluk} name="taluk" value={formData.taluk} onChange={handleChange} lang={lang} />
+                                                <InputField label={t.fields.pincode} name="pincode" value={formData.pincode} onChange={handleChange} lang={lang} />
+                                            </div>
 
-                                    <button onClick={nextStep} className={clsx("w-full mt-6 bg-zinc-100 hover:bg-white text-black py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all", lang === 'ta' && 'font-tamil')}>
-                                        {LANG[lang].booking.next || "Next"} <ChevronRight size={18} />
-                                    </button>
+                                            {regType === 'bull' && (
+                                                <div className="mt-6 pt-6 border-t border-zinc-800">
+                                                    <h4 className={clsx("text-lg font-bold text-zinc-300 mb-4", lang === 'ta' && 'font-tamil')}>
+                                                        {lang === 'ta' ? 'உதவியாளர் விவரங்கள்' : 'Assistant Details'}
+                                                    </h4>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <InputField label={t.fields.assistName} name="assistName" value={formData.assistName} onChange={handleChange} lang={lang} />
+                                                        <InputField label={t.fields.assistMobile} name="assistMobile" type="tel" value={formData.assistMobile} onChange={handleChange} lang={lang} />
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            <button onClick={nextStep} className={clsx("w-full mt-6 bg-zinc-100 hover:bg-white text-black py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all", lang === 'ta' && 'font-tamil')}>
+                                                {LANG[lang].booking.next || "Next"} <ChevronRight size={18} />
+                                            </button>
+                                        </>
+                                    )}
                                 </motion.div>
                             )}
 

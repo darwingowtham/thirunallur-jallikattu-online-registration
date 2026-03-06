@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import templeImg from '../assets/temple/amman_temple.jpeg';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 const PRIMARY_ITEMS = [
     { key: 'home', label: { en: 'Home', ta: 'முகப்பு' }, path: '/' },
@@ -23,6 +24,7 @@ const SECONDARY_ITEMS = [
 const ALL_ITEMS = [...PRIMARY_ITEMS, ...SECONDARY_ITEMS];
 
 export default function Navbar({ lang, setLang }) {
+    const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredKey, setHoveredKey] = useState(null);
     const [instaMenuOpen, setInstaMenuOpen] = useState(false);
@@ -172,6 +174,15 @@ export default function Navbar({ lang, setLang }) {
                             );
                         })}
 
+                        {user && (
+                            <Link to="/profile" className="flex items-center gap-2 px-2 py-1 rounded-full bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 transition-colors ml-2 border border-black/10 dark:border-white/20">
+                                <img src={user.picture} alt="Profile" className="w-6 h-6 rounded-full" referrerPolicy="no-referrer" />
+                                <span className={clsx("text-xs font-bold text-zinc-800 dark:text-white hidden xl:block uppercase tracking-wider", lang === 'ta' && 'font-tamil')}>
+                                    {user.name.split(' ')[0]}
+                                </span>
+                            </Link>
+                        )}
+
                         <button
                             onClick={() => setLang(l => l === 'en' ? 'ta' : 'en')}
                             className="flex items-center gap-2 px-3 py-1 bg-red-900/20 border border-red-900/50 rounded-full text-red-400 hover:text-red-300 text-xs font-bold transition-colors ml-2"
@@ -228,6 +239,16 @@ export default function Navbar({ lang, setLang }) {
                                     {item.label[lang]}
                                 </Link>
                             ))}
+                            {user && (
+                                <Link
+                                    to="/profile"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center gap-3 px-3 py-3 mt-4 rounded-md text-base font-medium border-t border-white/10 text-white bg-white/5"
+                                >
+                                    <img src={user.picture} alt="Profile" className="w-8 h-8 rounded-full" referrerPolicy="no-referrer" />
+                                    <span>{lang === 'ta' ? 'எனது கணக்கு' : 'My Profile'}</span>
+                                </Link>
+                            )}
                         </div>
 
                         {/* Social Links in Mobile Menu */}
