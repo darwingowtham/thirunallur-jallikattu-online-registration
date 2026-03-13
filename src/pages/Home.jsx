@@ -92,16 +92,7 @@ export default function Home({ lang }) {
                     <ChevronRight className="rotate-90 w-6 h-6" />
                 </motion.div>
 
-                {/* Bottom Left Small Temple Image */}
-                <div className="absolute bottom-0 left-0 z-30 group flex items-end justify-start pointer-events-none">
-                    {/* Blurred backdrop for the image */}
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-md rounded-tr-lg scale-105 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <img
-                        src="/images/temple_images/temple15.jpeg"
-                        alt="Thirunallur Ambu"
-                        className="relative w-24 sm:w-32 md:w-40 h-auto block rounded-tr-lg shadow-2xl opacity-90 group-hover:opacity-100 transition-all z-10 pointer-events-auto"
-                    />
-                </div>
+
             </div>
 
             {/* Intro Section */}
