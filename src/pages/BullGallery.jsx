@@ -5,12 +5,12 @@ import clsx from 'clsx';
 import templeImg from '../assets/temple/amman_temple.jpeg';
 
 const BULLS = [
-    { id: 1, name: "Karuppu", color: "bg-slate-900", stats: "12 Wins", desc: "The Untamed Legend of Trichy", weight: "450kg", image: "/images/Bulls_Images/bull.jpeg" },
-    { id: 2, name: "Sevalai", color: "bg-red-700", stats: "8 Wins", desc: "Pride of Thirunallur", weight: "420kg", image: "/images/Bulls_Images/bull2.jpeg" },
-    { id: 3, name: "Komban", color: "bg-amber-800", stats: "15 Wins", desc: "Feared by Tamers", weight: "500kg", image: "/images/Bulls_Images/bull3.jpeg" },
-    { id: 4, name: "Mayil", color: "bg-zinc-600", stats: "5 Wins", desc: "Rising Star", weight: "380kg", image: "/images/Bulls_Images/bull4.jpeg" },
-    { id: 5, name: "Rudra", color: "bg-orange-800", stats: "21 Wins", desc: "Unstoppable Force", weight: "480kg", image: "/images/Bulls_Images/bull5.jpeg" },
-    { id: 6, name: "Vettai", color: "bg-neutral-800", stats: "9 Wins", desc: "Speed Demon", weight: "410kg", image: "/images/Bulls_Images/bull.jpeg" }, // Reusing bull.jpeg for 6th as we only have 5 valid named ones in list
+    { id: 1, name: "Karuppu", color: "bg-slate-900", stats: "12 Wins", desc: "The Untamed Legend of Trichy", weight: "450kg", image: "images/Bulls_Images/bull3.jpeg" },
+    { id: 2, name: "Sevalai", color: "bg-red-700", stats: "8 Wins", desc: "Pride of Thirunallur", weight: "420kg", image: "images/Bulls_Images/bull5.jpeg" },
+    { id: 3, name: "Komban", color: "bg-amber-800", stats: "15 Wins", desc: "Feared by Tamers", weight: "500kg", image: "images/Bulls_Images/bull3.jpeg" },
+    { id: 4, name: "Mayil", color: "bg-zinc-600", stats: "5 Wins", desc: "Rising Star", weight: "380kg", image: "images/Bulls_Images/bull5.jpeg" },
+    { id: 5, name: "Rudra", color: "bg-orange-800", stats: "21 Wins", desc: "Unstoppable Force", weight: "480kg", image: "images/Bulls_Images/bull3.jpeg" },
+    { id: 6, name: "Vettai", color: "bg-neutral-800", stats: "9 Wins", desc: "Speed Demon", weight: "410kg", image: "images/Bulls_Images/bull5.jpeg" },
 ];
 
 export default function BullGallery({ lang }) {

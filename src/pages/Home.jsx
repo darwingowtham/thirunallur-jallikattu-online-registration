@@ -136,7 +136,7 @@ export default function Home({ lang }) {
                         <div className="absolute inset-0 bg-thiru-gold/5 rounded-2xl" />
                         <div className="relative bg-black/80 backdrop-blur rounded-xl flex items-center justify-center h-80 overflow-hidden">
                             <img
-                                src="/images/Bulls_Images/logo.png"
+                                src="images/Bulls_Images/logo.png"
                                 alt="Thirunallur Logo"
                                 className="w-full h-full object-contain"
                             />
