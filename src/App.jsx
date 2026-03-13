@@ -13,6 +13,7 @@ import SocialLinks from './components/SocialLinks';
 import Videos from './pages/Videos';
 import Menu from './pages/Menu';
 import Profile from './pages/Profile';
+import Footer from './components/Footer';
 import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/live" element={<LiveUpdates lang={lang} />} />
             <Route path="/admin" element={<Admin lang={lang} />} />
           </Routes>
+          <Footer lang={lang} />
         </div>
       </div>
     </ThemeProvider>
