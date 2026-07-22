@@ -23,7 +23,7 @@ const SECONDARY_ITEMS = [
 
 const ALL_ITEMS = [...PRIMARY_ITEMS, ...SECONDARY_ITEMS];
 
-export default function Navbar({ lang, setLang }) {
+export default function Navbar({ lang, setLang, onOpenLogin }) {
     const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredKey, setHoveredKey] = useState(null);
@@ -76,66 +76,54 @@ export default function Navbar({ lang, setLang }) {
     React.useEffect(() => {
         const handleScroll = (e) => {
             if (waMenuOpenRef.current || instaMenuOpenRef.current) {
-                // If it's a touchmove, prevent defaults? No, let page scroll. Just close menu.
                 closeAllMenus();
             }
         };
 
-        const handleClickOutside = (event) => {
-            // Check WhatsApp Menu
-            if (waMenuOpenRef.current && waRef.current && !waRef.current.contains(event.target)) {
-                setWaMenuOpen(false);
-                waMenuOpenRef.current = false;
-            }
-            // Check Instagram Menu
-            if (instaMenuOpenRef.current && instaRef.current && !instaRef.current.contains(event.target)) {
-                setInstaMenuOpen(false);
-                instaMenuOpenRef.current = false;
+        const handleClickOutside = (e) => {
+            if (
+                waRef.current && !waRef.current.contains(e.target) &&
+                instaRef.current && !instaRef.current.contains(e.target)
+            ) {
+                closeAllMenus();
             }
         };
 
-        // Add listeners with capture to ensure they run before other events if needed, but bubbling is fine here.
-        // Using passive: true for scroll performance.
         window.addEventListener('scroll', handleScroll, { passive: true });
-        // Add touchmove listener for immediate close on mobile start-scroll
-        window.addEventListener('touchmove', handleScroll, { passive: true });
-
-        // Use pointerdown for broader mobile support? mousedown/touchstart is fine.
-        document.addEventListener('mousedown', handleClickOutside);
-        document.addEventListener('touchstart', handleClickOutside);
+        window.addEventListener('click', handleClickOutside);
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('touchmove', handleScroll);
-            document.removeEventListener('mousedown', handleClickOutside);
-            document.removeEventListener('touchstart', handleClickOutside);
+            window.removeEventListener('click', handleClickOutside);
         };
-    }, []); // Empty dependency array
+    }, []);
 
     return (
-        <nav className="fixed top-0 w-full z-[100] bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-black/10 dark:border-white/10 transition-colors duration-300">
-            <div className="w-full mx-auto px-4 lg:px-8">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md border-b border-black/10 dark:border-white/10 transition-colors duration-300">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
 
-                    {/* Logo */}
-                    <Link to="/" className="flex items-center gap-3 group shrink-0">
-                        {lang === 'ta' ? (
-                            <span className="text-xs sm:text-sm font-bold text-thiru-gold font-tamil whitespace-nowrap">
-                                திருநல்லூர் ஜல்லிக்கட்டு
+                    {/* Logo & Temple Image */}
+                    <Link to="/" className="flex items-center gap-3 group">
+                        <div className="relative">
+                            <img
+                                src={templeImg}
+                                alt="Amman Temple"
+                                className="w-12 h-12 rounded-full object-cover border-2 border-thiru-gold shadow-[0_0_10px_rgba(250,204,21,0.3)] group-hover:scale-105 transition-transform"
+                            />
+                            <div className="absolute inset-0 rounded-full bg-thiru-gold/20 animate-pulse" />
+                        </div>
+                        <div>
+                            <span className={clsx("block text-base sm:text-lg font-black text-black dark:text-white leading-none tracking-wide", lang === 'ta' && 'font-tamil')}>
+                                {lang === 'en' ? 'Thirunallur' : 'திருநல்லூர்'}
                             </span>
-                        ) : (
-                            <div className="flex flex-col">
-                                <span className="text-lg sm:text-xl font-bold text-thiru-gold leading-none">
-                                    THIRUNALLUR
-                                </span>
-                                <span className="text-[10px] sm:text-xs text-red-500 font-semibold tracking-wider">
-                                    JALLIKATTU
-                                </span>
-                            </div>
-                        )}
+                            <span className={clsx("text-[10px] sm:text-xs font-bold text-thiru-gold tracking-widest uppercase", lang === 'ta' && 'font-tamil')}>
+                                {lang === 'en' ? 'Jallikattu 2025' : 'ஜல்லிக்கட்டு 2025'}
+                            </span>
+                        </div>
                     </Link>
 
-                    {/* Desktop Nav */}
+                    {/* Desktop Navigation Links */}
                     <div
                         className="hidden md:flex items-center gap-1 xl:gap-2"
                         onMouseLeave={() => setHoveredKey(null)}
@@ -174,13 +162,21 @@ export default function Navbar({ lang, setLang }) {
                             );
                         })}
 
-                        {user && (
+                        {user ? (
                             <Link to="/profile" className="flex items-center gap-2 px-2 py-1 rounded-full bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 transition-colors ml-2 border border-black/10 dark:border-white/20">
                                 <img src={user.picture} alt="Profile" className="w-6 h-6 rounded-full" referrerPolicy="no-referrer" />
                                 <span className={clsx("text-xs font-bold text-zinc-800 dark:text-white hidden xl:block uppercase tracking-wider", lang === 'ta' && 'font-tamil')}>
                                     {user.name.split(' ')[0]}
                                 </span>
                             </Link>
+                        ) : (
+                            <button
+                                onClick={onOpenLogin}
+                                className="flex items-center gap-1.5 px-3 py-1 bg-thiru-gold/20 hover:bg-thiru-gold/30 text-thiru-gold border border-thiru-gold/40 rounded-full text-xs font-bold transition-colors ml-2 touch-target"
+                            >
+                                <User size={14} />
+                                <span className={clsx(lang === 'ta' && 'font-tamil')}>{lang === 'en' ? 'Sign In' : 'உள்நுழைய'}</span>
+                            </button>
                         )}
 
                         <button
@@ -201,7 +197,15 @@ export default function Navbar({ lang, setLang }) {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="md:hidden flex items-center gap-4">
+                    <div className="md:hidden flex items-center gap-3">
+                        {!user && (
+                            <button
+                                onClick={onOpenLogin}
+                                className="text-thiru-gold border border-thiru-gold/40 bg-thiru-gold/10 px-2.5 py-1 rounded-full font-bold text-xs"
+                            >
+                                {lang === 'en' ? 'Sign In' : 'உள்நுழைய'}
+                            </button>
+                        )}
                         <button
                             onClick={() => setLang(l => l === 'en' ? 'ta' : 'en')}
                             className="text-thiru-gold font-bold text-sm"
@@ -239,7 +243,7 @@ export default function Navbar({ lang, setLang }) {
                                     {item.label[lang]}
                                 </Link>
                             ))}
-                            {user && (
+                            {user ? (
                                 <Link
                                     to="/profile"
                                     onClick={() => setIsOpen(false)}
@@ -248,6 +252,14 @@ export default function Navbar({ lang, setLang }) {
                                     <img src={user.picture} alt="Profile" className="w-8 h-8 rounded-full" referrerPolicy="no-referrer" />
                                     <span>{lang === 'ta' ? 'எனது கணக்கு' : 'My Profile'}</span>
                                 </Link>
+                            ) : (
+                                <button
+                                    onClick={() => { setIsOpen(false); onOpenLogin(); }}
+                                    className="flex items-center justify-center gap-2 w-full py-3 mt-4 rounded-md font-bold text-white bg-thiru-gold/20 border border-thiru-gold/40"
+                                >
+                                    <User size={18} className="text-thiru-gold" />
+                                    <span>{lang === 'ta' ? 'உள்நுழைய' : 'Sign In / Register'}</span>
+                                </button>
                             )}
                         </div>
 

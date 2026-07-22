@@ -16,8 +16,12 @@ import Profile from './pages/Profile';
 import Footer from './components/Footer';
 import { ThemeProvider } from './context/ThemeContext';
 
+import Login from './pages/Login';
+import LoginModal from './components/LoginModal';
+
 function App() {
   const [lang, setLang] = useState('en');
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   return (
     <ThemeProvider>
@@ -25,10 +29,11 @@ function App() {
         <SocialLinks lang={lang} vertical={true} />
         <ParticleBackground />
         <div className="relative z-10">
-          <Navbar lang={lang} setLang={setLang} />
+          <Navbar lang={lang} setLang={setLang} onOpenLogin={() => setIsLoginModalOpen(true)} />
           <Routes>
             <Route path="/" element={<Home lang={lang} />} />
             <Route path="/book" element={<Registration lang={lang} />} />
+            <Route path="/login" element={<Login lang={lang} />} />
             <Route path="/menu" element={<Menu lang={lang} />} />
             <Route path="/profile" element={<Profile lang={lang} />} />
             <Route path="/tracking" element={<ApplicationStatus lang={lang} />} />
@@ -38,6 +43,11 @@ function App() {
             <Route path="/admin" element={<Admin lang={lang} />} />
           </Routes>
           <Footer lang={lang} />
+          <LoginModal
+            isOpen={isLoginModalOpen}
+            onClose={() => setIsLoginModalOpen(false)}
+            lang={lang}
+          />
         </div>
       </div>
     </ThemeProvider>
