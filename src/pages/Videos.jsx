@@ -1,7 +1,8 @@
-import React from 'react';
-import { Play, Calendar, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { Play, Calendar } from 'lucide-react';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
+import VideoModal from '../components/VideoModal';
 
 const ALL_VIDEOS = [
     {
@@ -73,6 +74,15 @@ const ALL_VIDEOS = [
 ];
 
 export default function Videos({ lang }) {
+    const [selectedVideo, setSelectedVideo] = useState(null);
+
+    const handleVideoClick = (e, video) => {
+        e.preventDefault();
+        if (video.url && video.url !== '#') {
+            setSelectedVideo(video);
+        }
+    };
+
     return (
         <div className="pt-24 pb-12 px-4 min-h-screen bg-thiru-black relative z-10">
             <div className="max-w-7xl mx-auto">
@@ -102,12 +112,10 @@ export default function Videos({ lang }) {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {yearGroup.videos.map((video) => (
-                                    <motion.a
+                                    <motion.button
                                         key={video.id}
-                                        href={video.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group relative aspect-video bg-zinc-900 rounded-xl overflow-hidden border border-white/10 hover:border-thiru-gold/50 transition-all shadow-xl hover:shadow-thiru-gold/10"
+                                        onClick={(e) => handleVideoClick(e, video)}
+                                        className="group relative aspect-video bg-zinc-900 rounded-xl overflow-hidden border border-white/10 hover:border-thiru-gold/50 transition-all shadow-xl hover:shadow-thiru-gold/10 text-left w-full block focus:outline-none focus:ring-2 focus:ring-thiru-gold/50 cursor-pointer"
                                         whileHover={{ scale: 1.02 }}
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
@@ -136,17 +144,24 @@ export default function Videos({ lang }) {
                                                 {video.title}
                                             </h4>
                                             <div className="mt-3 flex items-center gap-2 text-xs text-zinc-400 font-medium uppercase tracking-wider group-hover:text-white transition-colors">
-                                                <span>Watch on YouTube</span>
-                                                <ExternalLink size={12} />
+                                                <span>{lang === 'en' ? 'Watch In-Page' : 'காணொளியை காண'}</span>
+                                                <Play size={12} />
                                             </div>
                                         </div>
-                                    </motion.a>
+                                    </motion.button>
                                 ))}
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
+
+            {/* In-Page Video Modal */}
+            <VideoModal
+                isOpen={!!selectedVideo}
+                onClose={() => setSelectedVideo(null)}
+                video={selectedVideo}
+            />
         </div>
     );
 }

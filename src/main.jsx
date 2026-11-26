@@ -6,12 +6,19 @@ import { HashRouter } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from './context/AuthContext';
 
-// Using a placeholder environment variable for the Google Client ID
-// The user needs to set VITE_GOOGLE_CLIENT_ID in their .env file
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID_HERE";
+// Retrieve Google OAuth Client ID from Vite environment
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+
+if (!GOOGLE_CLIENT_ID && import.meta.env.DEV) {
+  console.warn(
+    "[Google OAuth] VITE_GOOGLE_CLIENT_ID is not configured in .env. " +
+    "To enable Google Sign-In, create a .env file and set your authorized Google Client ID."
+  );
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID || "dummy-client-id"}>
       <AuthProvider>
         <HashRouter>
           <App />

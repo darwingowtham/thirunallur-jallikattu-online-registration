@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useRef } from 'react';
-import { Menu, X, Ticket, Video, Image as ImageIcon, User, Languages, Search, MoreHorizontal, Sun, Moon } from 'lucide-react';
+import { Menu, X, Ticket, Video, Image as ImageIcon, User, Languages, Search, MoreHorizontal, Sun, Moon, Trophy } from 'lucide-react';
 import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa';
 import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,6 +11,7 @@ import { useAuth } from '../context/AuthContext';
 
 const PRIMARY_ITEMS = [
     { key: 'home', label: { en: 'Home', ta: 'முகப்பு' }, path: '/' },
+    { key: 'kabaddi', label: { en: 'Kabaddi', ta: 'கபடி' }, path: '/#kabaddi', icon: Trophy, isKabaddi: true },
     { key: 'tracking', label: { en: 'Status', ta: 'நிலை' }, path: '/tracking', icon: Search },
     { key: 'live', label: { en: 'Live Updates', ta: 'நேரலை' }, path: '/live', icon: Video },
 ];
@@ -99,7 +100,7 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
     }, []);
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md border-b border-black/10 dark:border-white/10 transition-colors duration-300">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800/80 transition-colors duration-300 shadow-sm dark:shadow-none">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
 
@@ -109,16 +110,13 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
                             <img
                                 src={templeImg}
                                 alt="Amman Temple"
-                                className="w-12 h-12 rounded-full object-cover border-2 border-thiru-gold shadow-[0_0_10px_rgba(250,204,21,0.3)] group-hover:scale-105 transition-transform"
+                                className="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-thiru-gold shadow-[0_0_10px_rgba(250,204,21,0.3)] group-hover:scale-105 transition-transform"
                             />
                             <div className="absolute inset-0 rounded-full bg-thiru-gold/20 animate-pulse" />
                         </div>
                         <div>
-                            <span className={clsx("block text-base sm:text-lg font-black text-black dark:text-white leading-none tracking-wide", lang === 'ta' && 'font-tamil')}>
-                                {lang === 'en' ? 'Thirunallur' : 'திருநல்லூர்'}
-                            </span>
-                            <span className={clsx("text-[10px] sm:text-xs font-bold text-thiru-gold tracking-widest uppercase", lang === 'ta' && 'font-tamil')}>
-                                {lang === 'en' ? 'Jallikattu 2025' : 'ஜல்லிக்கட்டு 2025'}
+                            <span className={clsx("block text-base sm:text-lg font-black text-zinc-900 dark:text-white leading-tight tracking-tight", lang === 'ta' && 'font-tamil')}>
+                                {lang === 'en' ? 'Thirunallur Jallikattu' : 'திருநல்லூர் ஜல்லிக்கட்டு'}
                             </span>
                         </div>
                     </Link>
@@ -130,7 +128,7 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
                     >
                         {ALL_ITEMS.map((item) => {
                             const Icon = item.icon;
-                            const isActive = location.pathname === item.path;
+                            const isActive = location.pathname === item.path || (item.path.startsWith('/#') && location.hash === item.path.replace('/', ''));
                             const isHighlighted = hoveredKey ? hoveredKey === item.key : isActive;
                             return (
                                 <div
@@ -141,21 +139,23 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
                                     {isHighlighted && (
                                         <motion.span
                                             layoutId="nav-active-pill"
-                                            className="absolute inset-0 rounded-md bg-blue-900 border border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)] z-0"
+                                            className="absolute inset-0 rounded-md bg-zinc-900 dark:bg-blue-900 border border-zinc-700 dark:border-blue-400 shadow-sm dark:shadow-[0_0_15px_rgba(59,130,246,0.5)] z-0"
                                             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                                         />
                                     )}
                                     <Link
                                         to={item.path}
                                         className={clsx(
-                                            "relative z-10 flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] lg:text-xs font-bold uppercase tracking-wide whitespace-nowrap transition-colors duration-150",
+                                            "relative z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] lg:text-xs font-bold uppercase tracking-wide whitespace-nowrap transition-colors duration-150",
                                             isHighlighted
                                                 ? "text-white"
-                                                : "bg-transparent text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400",
+                                                : item.isKabaddi
+                                                    ? "text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 font-extrabold"
+                                                    : "bg-transparent text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white",
                                             lang === 'ta' && "font-tamil"
                                         )}
                                     >
-                                        {Icon && <Icon size={12} className="lg:w-3.5 lg:h-3.5" />}
+                                        {Icon && <Icon size={13} className={clsx("lg:w-3.5 lg:h-3.5", item.isKabaddi && !isHighlighted && "text-amber-600 dark:text-amber-400")} />}
                                         {item.label[lang]}
                                     </Link>
                                 </div>
@@ -163,7 +163,7 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
                         })}
 
                         {user ? (
-                            <Link to="/profile" className="flex items-center gap-2 px-2 py-1 rounded-full bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 transition-colors ml-2 border border-black/10 dark:border-white/20">
+                            <Link to="/profile" className="flex items-center gap-2 px-2 py-1 rounded-full bg-zinc-100 dark:bg-white/10 hover:bg-zinc-200 dark:hover:bg-white/20 transition-colors ml-2 border border-zinc-300 dark:border-white/20">
                                 <img src={user.picture} alt="Profile" className="w-6 h-6 rounded-full" referrerPolicy="no-referrer" />
                                 <span className={clsx("text-xs font-bold text-zinc-800 dark:text-white hidden xl:block uppercase tracking-wider", lang === 'ta' && 'font-tamil')}>
                                     {user.name.split(' ')[0]}
@@ -172,7 +172,7 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
                         ) : (
                             <button
                                 onClick={onOpenLogin}
-                                className="flex items-center gap-1.5 px-3 py-1 bg-thiru-gold/20 hover:bg-thiru-gold/30 text-thiru-gold border border-thiru-gold/40 rounded-full text-xs font-bold transition-colors ml-2 touch-target"
+                                className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-thiru-gold border border-amber-500/30 dark:border-thiru-gold/40 rounded-full text-xs font-bold transition-colors ml-2 touch-target"
                             >
                                 <User size={14} />
                                 <span className={clsx(lang === 'ta' && 'font-tamil')}>{lang === 'en' ? 'Sign In' : 'உள்நுழைய'}</span>
@@ -181,7 +181,7 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
 
                         <button
                             onClick={() => setLang(l => l === 'en' ? 'ta' : 'en')}
-                            className="flex items-center gap-2 px-3 py-1 bg-red-900/20 border border-red-900/50 rounded-full text-red-400 hover:text-red-300 text-xs font-bold transition-colors ml-2"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-full text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-bold transition-colors ml-1.5"
                         >
                             <Languages size={14} />
                             {lang === 'en' ? 'தமிழ்' : 'ENG'}
@@ -189,31 +189,42 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
 
                         <button
                             onClick={toggleTheme}
-                            className="p-1.5 ml-1 rounded-full bg-gray-100 dark:bg-white/10 text-yellow-600 dark:text-yellow-400 hover:bg-gray-200 dark:hover:bg-white/20 transition-colors"
+                            className="p-2 ml-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-amber-600 dark:text-amber-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-200 dark:border-zinc-700 touch-target flex items-center justify-center"
                             aria-label="Toggle Theme"
                         >
-                            {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+                            {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
                         </button>
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <div className="md:hidden flex items-center gap-3">
+                    {/* Mobile Menu Button & Quick Actions */}
+                    <div className="md:hidden flex items-center gap-2 sm:gap-3">
                         {!user && (
                             <button
                                 onClick={onOpenLogin}
-                                className="text-thiru-gold border border-thiru-gold/40 bg-thiru-gold/10 px-2.5 py-1 rounded-full font-bold text-xs"
+                                className="text-amber-700 dark:text-thiru-gold border border-amber-500/30 dark:border-thiru-gold/40 bg-amber-500/10 px-2.5 py-1 rounded-full font-bold text-xs"
                             >
                                 {lang === 'en' ? 'Sign In' : 'உள்நுழைய'}
                             </button>
                         )}
                         <button
                             onClick={() => setLang(l => l === 'en' ? 'ta' : 'en')}
-                            className="text-thiru-gold font-bold text-sm"
+                            className="text-zinc-700 dark:text-thiru-gold font-bold text-xs px-2 py-1 rounded border border-zinc-200 dark:border-zinc-800"
                         >
                             {lang === 'en' ? 'TA' : 'EN'}
                         </button>
-                        <button onClick={() => setIsOpen(!isOpen)} className="text-zinc-400 hover:text-white">
-                            {isOpen ? <X size={28} /> : <Menu size={28} />}
+                        <button
+                            onClick={toggleTheme}
+                            className="p-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-amber-600 dark:text-amber-400 border border-zinc-200 dark:border-zinc-700"
+                            aria-label="Toggle Theme"
+                        >
+                            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                        </button>
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white p-1"
+                            aria-label="Toggle menu"
+                        >
+                            {isOpen ? <X size={26} /> : <Menu size={26} />}
                         </button>
                     </div>
                 </div>
@@ -226,28 +237,37 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="md:hidden bg-zinc-950 border-b border-white/10 overflow-hidden relative z-50"
+                        className="md:hidden bg-white dark:bg-[#0a0a0a] border-b border-zinc-200 dark:border-zinc-800 overflow-hidden relative z-50 shadow-2xl"
                     >
-                        <div className="px-4 pt-2 pb-6 space-y-2">
+                        <div className="px-4 pt-2 pb-6 space-y-1">
                             {ALL_ITEMS.map((item) => (
                                 <Link
                                     key={item.key}
                                     to={item.path}
                                     onClick={() => setIsOpen(false)}
                                     className={clsx(
-                                        "block px-3 py-3 rounded-md text-base font-medium border-b border-white/5",
-                                        location.pathname === item.path ? "text-thiru-gold" : "text-zinc-400",
+                                        "flex items-center justify-between px-3 py-3 rounded-lg text-sm font-semibold border-b border-zinc-100 dark:border-zinc-800/60 transition-colors touch-target",
+                                        (location.pathname === item.path || (item.path.startsWith('/#') && location.hash === item.path.replace('/', '')))
+                                            ? "text-red-600 dark:text-thiru-gold bg-zinc-50 dark:bg-zinc-900/60 font-bold"
+                                            : item.isKabaddi
+                                                ? "text-amber-700 dark:text-amber-400 font-bold"
+                                                : "text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white",
                                         lang === 'ta' && "font-tamil"
                                     )}
                                 >
-                                    {item.label[lang]}
+                                    <span>{item.label[lang]}</span>
+                                    {item.isKabaddi && (
+                                        <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30">
+                                            Arena
+                                        </span>
+                                    )}
                                 </Link>
                             ))}
                             {user ? (
                                 <Link
                                     to="/profile"
                                     onClick={() => setIsOpen(false)}
-                                    className="flex items-center gap-3 px-3 py-3 mt-4 rounded-md text-base font-medium border-t border-white/10 text-white bg-white/5"
+                                    className="flex items-center gap-3 px-3 py-3 mt-4 rounded-lg text-sm font-semibold border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white bg-zinc-50 dark:bg-white/5"
                                 >
                                     <img src={user.picture} alt="Profile" className="w-8 h-8 rounded-full" referrerPolicy="no-referrer" />
                                     <span>{lang === 'ta' ? 'எனது கணக்கு' : 'My Profile'}</span>
@@ -255,9 +275,9 @@ export default function Navbar({ lang, setLang, onOpenLogin }) {
                             ) : (
                                 <button
                                     onClick={() => { setIsOpen(false); onOpenLogin(); }}
-                                    className="flex items-center justify-center gap-2 w-full py-3 mt-4 rounded-md font-bold text-white bg-thiru-gold/20 border border-thiru-gold/40"
+                                    className="flex items-center justify-center gap-2 w-full py-3 mt-4 rounded-lg font-bold text-amber-900 dark:text-white bg-amber-500/15 dark:bg-thiru-gold/20 border border-amber-500/30 dark:border-thiru-gold/40 touch-target"
                                 >
-                                    <User size={18} className="text-thiru-gold" />
+                                    <User size={18} className="text-amber-700 dark:text-thiru-gold" />
                                     <span>{lang === 'ta' ? 'உள்நுழைய' : 'Sign In / Register'}</span>
                                 </button>
                             )}

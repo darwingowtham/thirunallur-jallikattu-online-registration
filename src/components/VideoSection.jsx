@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Video, Play, ExternalLink, X } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Video, Play } from 'lucide-react';
 import clsx from 'clsx';
+import VideoModal from './VideoModal';
 
 const ALL_VIDEOS = [
     {
@@ -75,27 +76,6 @@ const ALL_VIDEOS = [
 export default function VideoSection({ lang }) {
     const [selectedVideo, setSelectedVideo] = useState(null);
 
-    const getEmbedUrl = (url) => {
-        if (!url || url === '#') return null;
-
-        let videoId = '';
-
-        // Handle youtu.be links
-        if (url.includes('youtu.be/')) {
-            videoId = url.split('youtu.be/')[1].split('?')[0];
-        }
-        // Handle youtube.com/live links
-        else if (url.includes('youtube.com/live/')) {
-            videoId = url.split('youtube.com/live/')[1].split('?')[0];
-        }
-        // Handle youtube.com/watch links
-        else if (url.includes('v=')) {
-            videoId = url.split('v=')[1].split('&')[0];
-        }
-
-        return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : null;
-    };
-
     const handleVideoClick = (e, video) => {
         e.preventDefault();
         if (video.url && video.url !== '#') {
@@ -104,20 +84,20 @@ export default function VideoSection({ lang }) {
     };
 
     return (
-        <section id="videos" className="relative py-24 px-6 overflow-hidden">
-            <div className="absolute inset-0 bg-zinc-900">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-thiru-black via-transparent to-thiru-black"></div>
+        <section id="videos" className="relative py-24 px-6 overflow-hidden bg-[#f8fafc] dark:bg-[#0a0a0a] transition-colors duration-300">
+            <div className="absolute inset-0 bg-transparent">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 dark:opacity-15"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/5 dark:to-black/40 pointer-events-none"></div>
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto space-y-16">
                 {/* Header Text */}
                 <div className="text-center space-y-4">
                     <Video className="w-12 h-12 text-thiru-red mx-auto" />
-                    <h2 className={clsx("text-4xl md:text-5xl font-black text-white", lang === 'ta' && 'font-tamil')}>
+                    <h2 className={clsx("text-4xl md:text-5xl font-black text-zinc-900 dark:text-white", lang === 'ta' && 'font-tamil')}>
                         {lang === 'en' ? 'Relive the Glory' : 'வீர விளையாட்டு நினைவுகள்'}
                     </h2>
-                    <p className={clsx("text-xl text-zinc-400 max-w-2xl mx-auto", lang === 'ta' && 'font-tamil')}>
+                    <p className={clsx("text-lg sm:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto", lang === 'ta' && 'font-tamil')}>
                         {lang === 'en'
                             ? 'Watch the most thrilling moments from previous years of Thirunallur Jallikattu.'
                             : 'திருநல்லூர் ஜல்லிக்கட்டின் கடந்த கால சிலிர்ப்பான தருணங்களை காணுங்கள்.'}
@@ -129,18 +109,17 @@ export default function VideoSection({ lang }) {
                     {ALL_VIDEOS.map((yearGroup) => (
                         <div key={yearGroup.year} className="relative">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="h-px bg-white/10 flex-grow"></div>
-                                <h3 className="text-2xl font-black text-white/30 font-mono">{yearGroup.year}</h3>
-                                <div className="h-px bg-white/10 flex-grow"></div>
+                                <div className="h-px bg-zinc-300 dark:bg-white/10 flex-grow"></div>
+                                <h3 className="text-2xl font-black text-zinc-400 dark:text-white/30 font-mono">{yearGroup.year}</h3>
+                                <div className="h-px bg-zinc-300 dark:bg-white/10 flex-grow"></div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {yearGroup.videos.map((video) => (
-                                    <motion.a
+                                    <motion.button
                                         key={video.id}
-                                        href={video.url}
                                         onClick={(e) => handleVideoClick(e, video)}
-                                        className="group relative aspect-video bg-zinc-950 rounded-xl overflow-hidden border border-white/10 hover:border-thiru-gold/50 transition-all shadow-xl hover:shadow-thiru-gold/10 cursor-pointer"
+                                        className="group relative aspect-video bg-zinc-950 rounded-xl overflow-hidden border border-white/10 hover:border-thiru-gold/50 transition-all shadow-xl hover:shadow-thiru-gold/10 cursor-pointer text-left w-full block focus:outline-none focus:ring-2 focus:ring-thiru-gold/50"
                                         whileHover={{ scale: 1.02 }}
                                     >
                                         <div className="absolute inset-0 z-0">
@@ -164,11 +143,11 @@ export default function VideoSection({ lang }) {
                                                 {video.title}
                                             </h4>
                                             <div className="mt-2 flex items-center gap-2 text-xs text-zinc-400 font-medium uppercase tracking-wider group-hover:text-white transition-colors">
-                                                <span>{lang === 'en' ? 'Watch Now' : 'காணொளியை காண'}</span>
+                                                <span>{lang === 'en' ? 'Watch In-Page' : 'காணொளியை காண'}</span>
                                                 <Play size={12} />
                                             </div>
                                         </div>
-                                    </motion.a>
+                                    </motion.button>
                                 ))}
                             </div>
                         </div>
@@ -176,47 +155,12 @@ export default function VideoSection({ lang }) {
                 </div>
             </div>
 
-            {/* Video Modal */}
-            <AnimatePresence>
-                {selectedVideo && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
-                        onClick={() => setSelectedVideo(null)}
-                    >
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <button
-                                onClick={() => setSelectedVideo(null)}
-                                className="absolute top-4 right-4 z-50 p-2 bg-black/50 hover:bg-thiru-red text-white rounded-full transition-colors backdrop-blur-sm"
-                            >
-                                <X size={24} />
-                            </button>
-
-                            {getEmbedUrl(selectedVideo.url) ? (
-                                <iframe
-                                    src={getEmbedUrl(selectedVideo.url)}
-                                    title={selectedVideo.title}
-                                    className="w-full h-full"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-white">
-                                    <p>Video URL format not supported for embed.</p>
-                                </div>
-                            )}
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* In-Page Video Lightbox Modal */}
+            <VideoModal
+                isOpen={!!selectedVideo}
+                onClose={() => setSelectedVideo(null)}
+                video={selectedVideo}
+            />
         </section>
     );
 }

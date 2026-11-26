@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube, FaTwitter } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa';
 import clsx from 'clsx';
 
 const SOCIAL_LINKS = [
@@ -43,14 +43,6 @@ const SOCIAL_LINKS = [
         color: 'hover:text-blue-600',
         bg: 'hover:bg-blue-600/10',
         border: 'hover:border-blue-600/50'
-    },
-    {
-        name: 'Twitter',
-        icon: FaTwitter,
-        url: 'https://twitter.com/thirunallur_jk', // Replace with actual handle
-        color: 'hover:text-sky-500',
-        bg: 'hover:bg-sky-500/10',
-        border: 'hover:border-sky-500/50'
     }
 ];
 

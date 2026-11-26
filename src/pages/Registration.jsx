@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { User, Shield, CreditCard, CheckCircle, ChevronRight, ChevronLeft, Upload, FileText, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
-import { FcGoogle } from 'react-icons/fc';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { useAuth } from '../context/AuthContext';
@@ -23,7 +22,7 @@ const InputField = ({ label, name, type = "text", required = true, value, onChan
             required={required}
             value={value}
             onChange={onChange}
-            className="w-full bg-black/50 border border-zinc-700 rounded-lg p-3 text-white focus:border-thiru-gold focus:ring-1 focus:ring-thiru-gold outline-none transition-all placeholder-zinc-800"
+            className="w-full min-h-[44px] bg-black/50 border border-zinc-700 rounded-lg p-3 text-white focus:border-thiru-gold focus:ring-1 focus:ring-thiru-gold outline-none transition-all placeholder-zinc-800"
         />
     </div>
 );
@@ -637,7 +636,7 @@ export default function Registration({ lang }) {
                                                 <h4 className={clsx("font-bold text-xl leading-tight uppercase tracking-wider text-shadow-md", lang === 'ta' && 'font-tamil')}>
                                                     {regType === 'bull' ? (lang === 'ta' ? 'ஜல்லிக்கட்டு காளை டோக்கன்' : 'JALLIKATTU BULL TOKEN') : (lang === 'ta' ? 'மாடுபிடி வீரர் டோக்கன்' : 'TAMER TOKEN')}
                                                 </h4>
-                                                <p className="text-[10px] uppercase tracking-[0.2em] font-medium mt-1 text-white/90">Thirunallur • 2025</p>
+                                                <p className="text-[10px] uppercase tracking-[0.2em] font-medium mt-1 text-white/90">Thirunallur Jallikattu</p>
                                             </div>
                                         </div>
 

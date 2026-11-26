@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Ticket, Video, Calendar, MapPin, ChevronRight } from 'lucide-react';
+import { Ticket, Video, Trophy, Calendar, MapPin, ChevronRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { LANG } from '../js/lang';
 import clsx from 'clsx';
 import VideoSection from '../components/VideoSection';
+import KabaddiSection from '../components/KabaddiSection';
 import ParticleBackground from '../components/ParticleBackground';
 import ColorfulParticleBackground from '../components/ColorfulParticleBackground';
 import DynamicHeroBackground from '../components/DynamicHeroBackground';
@@ -68,13 +69,13 @@ export default function Home({ lang }) {
                         transition={{ delay: 0.2, duration: 0.5 }}
                         className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-xs sm:max-w-none mx-auto"
                     >
-                        <Link to="/book" className="group relative px-6 py-4 sm:px-8 sm:py-4 bg-thiru-red rounded-sm overflow-hidden shadow-[0_0_20px_rgba(185,28,28,0.5)] w-full sm:w-auto text-center">
+                        <Link to="/book" className="group relative px-6 py-4 sm:px-8 sm:py-4 bg-thiru-red rounded-sm overflow-hidden shadow-[0_0_20px_rgba(185,28,28,0.5)] w-full sm:w-auto text-center touch-target">
                             <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-900 transition-transform group-hover:scale-110" />
                             <span className={clsx("relative z-10 font-bold text-white flex items-center justify-center gap-2 uppercase tracking-widest", lang === 'ta' && 'font-tamil')}>
                                 <Ticket size={20} /> {t.heroBtn}
                             </span>
                         </Link>
-                        <Link to="/live" className="group px-6 py-4 sm:px-8 sm:py-4 border border-thiru-gold text-thiru-gold rounded-sm hover:bg-thiru-gold/10 transition-colors bg-black/40 backdrop-blur-sm w-full sm:w-auto text-center">
+                        <Link to="/live" className="group px-6 py-4 sm:px-8 sm:py-4 border border-thiru-gold text-thiru-gold rounded-sm hover:bg-thiru-gold/10 transition-colors bg-black/40 backdrop-blur-sm w-full sm:w-auto text-center touch-target">
                             <span className={clsx("font-bold flex items-center justify-center gap-2 uppercase tracking-widest", lang === 'ta' && 'font-tamil')}>
                                 <Video size={20} /> {t.heroSec}
                             </span>
@@ -145,7 +146,11 @@ export default function Home({ lang }) {
                 </div>
             </section>
 
+            {/* Kabaddi Live & Highlights Section */}
+            <KabaddiSection lang={lang} />
+
+            {/* Jallikattu Archives Video Section */}
             <VideoSection lang={lang} />
-        </div >
+        </div>
     );
 }

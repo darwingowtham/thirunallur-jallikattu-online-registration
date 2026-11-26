@@ -72,34 +72,41 @@ export default function LoginModal({ isOpen, onClose, lang = 'en' }) {
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    className="relative z-10 w-full max-w-md bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl p-6 sm:p-8 overflow-hidden"
+                    className="relative z-10 w-full max-w-md bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-6 sm:p-8 overflow-hidden transition-colors duration-200"
                 >
                     {/* Close Button */}
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white rounded-full hover:bg-zinc-900 transition-colors touch-target"
+                        className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-800 dark:hover:text-white rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors touch-target"
                     >
                         <X size={20} />
                     </button>
 
                     {/* Header */}
                     <div className="text-center mb-6">
-                        <div className="w-12 h-12 bg-thiru-gold/10 border border-thiru-gold/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <User className="text-thiru-gold" size={24} />
+                        <div className="w-12 h-12 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <User className="text-amber-600 dark:text-thiru-gold" size={24} />
                         </div>
-                        <h2 className={clsx("text-2xl font-bold text-white", !isEn && 'font-tamil')}>
+                        <h2 className={clsx("text-2xl font-bold text-zinc-900 dark:text-white", !isEn && 'font-tamil')}>
                             {isSignUp
                                 ? (isEn ? 'Create Account' : 'கணக்கை உருவாக்கவும்')
                                 : (isEn ? 'Welcome Back' : 'மீண்டும் வருக')}
                         </h2>
-                        <p className={clsx("text-sm text-zinc-400 mt-1", !isEn && 'font-tamil')}>
+                        <p className={clsx("text-sm text-zinc-600 dark:text-zinc-400 mt-1", !isEn && 'font-tamil')}>
                             {isEn ? 'Sign in to access your Jallikattu registrations' : 'உங்கள் விண்ணப்பங்களை அணுக உள்நுழையவும்'}
                         </p>
                     </div>
 
                     {error && (
-                        <div className="mb-4 p-3 bg-red-900/30 border border-red-800/50 rounded-lg text-red-300 text-xs sm:text-sm text-center">
-                            {error}
+                        <div className="mb-4 p-3 bg-red-900/20 dark:bg-red-900/30 border border-red-300 dark:border-red-800/50 rounded-lg text-red-700 dark:text-red-300 text-xs sm:text-sm text-center space-y-1">
+                            <p className="font-semibold">{error}</p>
+                            {error.includes('Google') && (
+                                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                                    {isEn
+                                        ? "Tip: Check that your current domain is listed in Authorized JavaScript Origins in Google Cloud Console, or use email login below."
+                                        : "குறிப்பு: உங்கள் கூகிள் கிளவுட் அமைப்புகளில் Authorized Origin சரியாக உள்ளதா என சரிபார்க்கவும், அல்லது மின்னஞ்சல் மூலம் உள்நுழையவும்."}
+                                </p>
+                            )}
                         </div>
                     )}
 
@@ -107,8 +114,10 @@ export default function LoginModal({ isOpen, onClose, lang = 'en' }) {
                     <div className="mb-6 flex justify-center">
                         <GoogleLogin
                             onSuccess={handleGoogleSuccess}
-                            onError={() => setError(isEn ? 'Google Sign-In failed' : 'கூகிள் உள்நுழைவு தோல்வி')}
-                            useOneTap
+                            onError={() => {
+                                console.error("[Google OAuth] Sign-In failed. Verify Authorized JavaScript Origins for", window.location.origin);
+                                setError(isEn ? 'Google Sign-In failed (Origin mismatch or network issue)' : 'கூகிள் உள்நுழைவு தோல்வி (Origin mismatch)');
+                            }}
                             theme="filled_black"
                             shape="pill"
                             text="continue_with"
@@ -117,8 +126,8 @@ export default function LoginModal({ isOpen, onClose, lang = 'en' }) {
 
                     {/* Divider */}
                     <div className="relative flex items-center justify-center mb-6">
-                        <div className="border-t border-zinc-800 w-full" />
-                        <span className="bg-zinc-950 px-3 text-xs uppercase text-zinc-500 font-medium absolute">
+                        <div className="border-t border-zinc-200 dark:border-zinc-800 w-full" />
+                        <span className="bg-white dark:bg-zinc-950 px-3 text-xs uppercase text-zinc-500 font-medium absolute">
                             {isEn ? 'or email' : 'அல்லது மின்னஞ்சல்'}
                         </span>
                     </div>
@@ -127,58 +136,58 @@ export default function LoginModal({ isOpen, onClose, lang = 'en' }) {
                     <form onSubmit={handleFormSubmit} className="space-y-4">
                         {isSignUp && (
                             <div>
-                                <label className="block text-xs font-medium uppercase text-zinc-400 mb-1">
+                                <label className="block text-xs font-medium uppercase text-zinc-600 dark:text-zinc-400 mb-1">
                                     {isEn ? 'Full Name' : 'முழு பெயர்'}
                                 </label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                                     <input
                                         type="text"
                                         required
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                         placeholder={isEn ? 'John Doe' : 'உங்கள் பெயர்'}
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white placeholder-zinc-600 focus:border-thiru-gold outline-none"
+                                        className="w-full min-h-[44px] bg-zinc-50 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-lg py-2.5 pl-10 pr-4 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:border-thiru-gold outline-none"
                                     />
                                 </div>
                             </div>
                         )}
 
                         <div>
-                            <label className="block text-xs font-medium uppercase text-zinc-400 mb-1">
+                            <label className="block text-xs font-medium uppercase text-zinc-600 dark:text-zinc-400 mb-1">
                                 {isEn ? 'Email Address' : 'மின்னஞ்சல் முகவரி'}
                             </label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                                 <input
                                     type="email"
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     placeholder="user@example.com"
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white placeholder-zinc-600 focus:border-thiru-gold outline-none"
+                                    className="w-full min-h-[44px] bg-zinc-50 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-lg py-2.5 pl-10 pr-4 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:border-thiru-gold outline-none"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-medium uppercase text-zinc-400 mb-1">
+                            <label className="block text-xs font-medium uppercase text-zinc-600 dark:text-zinc-400 mb-1">
                                 {isEn ? 'Password' : 'கடவுச்சொல்'}
                             </label>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     required
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     placeholder="••••••••"
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg py-2.5 pl-10 pr-10 text-sm text-white placeholder-zinc-600 focus:border-thiru-gold outline-none"
+                                    className="w-full min-h-[44px] bg-zinc-50 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-lg py-2.5 pl-10 pr-10 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:border-thiru-gold outline-none"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 touch-target flex items-center justify-center"
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -187,7 +196,7 @@ export default function LoginModal({ isOpen, onClose, lang = 'en' }) {
 
                         <button
                             type="submit"
-                            className="w-full bg-thiru-red hover:bg-red-700 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors touch-target shadow-lg shadow-red-900/30"
+                            className="w-full min-h-[44px] bg-thiru-red hover:bg-red-700 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors touch-target shadow-lg shadow-red-900/30"
                         >
                             <LogIn size={18} />
                             <span>{isSignUp ? (isEn ? 'Register' : 'பதிவு செய்') : (isEn ? 'Sign In' : 'உள்நுழைய')}</span>

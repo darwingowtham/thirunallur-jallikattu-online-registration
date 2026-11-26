@@ -3,11 +3,19 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light dark;
+}
+
+html.dark {
   color-scheme: dark;
 }
 
+html.light {
+  color-scheme: light;
+}
+
 body {
-  @apply bg-thiru-black text-white overflow-x-hidden;
+  @apply bg-[#f8fafc] text-zinc-900 dark:bg-[#0a0a0a] dark:text-zinc-100 overflow-x-hidden transition-colors duration-300;
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
@@ -16,10 +24,10 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-zinc-900;
+  @apply bg-zinc-200 dark:bg-zinc-900;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-red-900 rounded-full hover:bg-red-700;
+  @apply bg-zinc-400 dark:bg-red-900 rounded-full hover:bg-zinc-500 dark:hover:bg-red-700;
 }
 
 /* Cinematic Utilities */

@@ -25,7 +25,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-thiru-black text-black dark:text-white selection:bg-thiru-red selection:text-white font-sans relative transition-colors duration-300">
+      <div className="min-h-screen bg-[#f8fafc] dark:bg-[#0a0a0a] text-zinc-900 dark:text-zinc-100 selection:bg-thiru-red selection:text-white font-sans relative transition-colors duration-300">
         <SocialLinks lang={lang} vertical={true} />
         <ParticleBackground />
         <div className="relative z-10">
@@ -39,6 +39,7 @@ function App() {
             <Route path="/tracking" element={<ApplicationStatus lang={lang} />} />
             <Route path="/gallery" element={<BullGallery lang={lang} />} />
             <Route path="/videos" element={<Navigate to="/#videos" replace />} />
+            <Route path="/kabaddi" element={<Navigate to="/#kabaddi" replace />} />
             <Route path="/live" element={<LiveUpdates lang={lang} />} />
             <Route path="/admin" element={<Admin lang={lang} />} />
           </Routes>
