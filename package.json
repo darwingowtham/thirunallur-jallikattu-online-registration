@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && node -e \"require('fs').writeFileSync('dist/vercel.json', JSON.stringify({git:{deploymentEnabled:{['gh-pages']:false}}},null,2))\"",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
